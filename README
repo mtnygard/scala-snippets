@@ -1,0 +1,92 @@
+Small pieces of Scala that replace whole frameworks.
+
+Interesting classes:
+ - com.n6.ews.bb.Blackboard: Actor based blackboard implementation. Concurrent and non-persistent.
+ - com.n6.ews.ib.Topic: Pub-sub with Actors.
+
+
+=======================
+
+Requires:
+ - Scala 2.7.5
+ - Specs 1.2.5
+ - Ant
+ - Ivy
+
+
+Thanks to robey for scala-build, a nice initial project setup.
+
+http://github.com/robey/scala-build/tree/master
+
+
+=======================
+
+Primary targets
+---------------
+  - clean
+    - erase all generated/built files
+  - distclean
+    - clean *everything*
+  - prepare
+    - resolve dependencies and download them
+  - compile
+    - build any java/scala source
+  - test
+    - build and run test suite (requires e:testclass)
+  - stress
+    - (optional) run stress test suite (requires e:stresstestclass)
+  - docs
+    - generate documentation
+  - package
+    - copy all generated/built files into distribution folder
+      (requires "local" repo)
+  - push
+    - copy all generated/built files into a final repository
+      (requires "push" repo)
+
+
+Properties that can change behavior
+-----------------------------------
+
+- skip.download
+    if defined, don't download ivy; assume it's present
+- skip.test
+    if defined, don't run test suite
+- skip.docs
+    if defined, don't build docs
+- libs.extra
+    any extra files to copy into dist/<p>/libs/ during compile
+- dist.extra
+    any extra files to copy into dist/<p> during compile
+- config.extra
+    any extra files to copy into config/ during compile
+- pack.deps
+    if defined, pack dependent jars into the final dist jar, to remove dependencies
+- thrift.bin
+    location of the "thrift" executable
+- push.build_name
+    if defined, add the build name (and git revision) to jars when pushed to the repo
+- dist.build_integration
+    if defined, add the git revision to the name of the final distribution zip file, and
+    don't use the version number in paths
+- no.git
+    if defined, don't try to fetch the current git head revision
+
+
+Extra ivy thingies
+------------------
+
+- e:buildpackage
+    causes a build.properties file to be created in the named package
+    (stores version #, etc -- used by RuntimeEnvironment in configgy)
+- e:thriftpackage
+    output package for generated thrift classes; causes thrift DDLs to be
+    compiled
+- e:testclass
+    class to execute for unit tests -- required, in order to run tests
+- e:stresstestclass
+    class to execute for stress tests (optional)
+- e:checktestclass
+    class to execute for scalacheck tests (optional)
+- e:jarclassname
+    creates an executable jar with this as the main class name
