@@ -86,7 +86,7 @@
   <!-- compile scala -->
 
   <target name="compile-scala" if="build.scala">
-    <scalac srcdir="${source.dir}/scala" destdir="${target.dir}/classes" force="changed" deprecation="on">
+    <scalac srcdir="${source.dir}/scala" destdir="${target.dir}/classes" force="changed" deprecation="on" unchecked="on">
       <classpath>
         <path refid="deps.path" />
       </classpath>
