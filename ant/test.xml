@@ -1,7 +1,7 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant">
 
   <target name="compile-tests" depends="prepare, compile" unless="skip.test" if="ivy.extra.testclass">
-    <scalac srcdir="${test.source.dir}/scala" destdir="${target.dir}/test-classes" force="changed" deprecation="on">
+    <scalac srcdir="${test.source.dir}/scala" destdir="${target.dir}/test-classes" force="changed" deprecation="on" unchecked="on">
       <classpath>
         <path refid="test.path" />
         <pathelement location="${target.dir}/classes" />
