@@ -61,5 +61,59 @@ object BlackboardSpecs extends Specification with JUnit {
         n must verify ( _.firstname.startsWith("Leon") )
       }
     }
+
+    "notify a supervisor of new values" in {
+      import actors.Actor
+      import actors.Actor._
+
+      case class Person(firstname: String, lastname: String) {
+        def mathematician = firstname.startsWith("Leo")
+      }
+
+      class Tallyman extends Actor {
+        case class Check()
+      
+        var hitcount = 0
+        def act() {
+          loop { 
+            receive {
+              case Update(x, m) => 
+                hitcount += 1
+
+              case Check() =>
+                reply(hitcount)
+            }
+          }
+        }
+      }
+
+      val supv = new Tallyman
+      supv start
+
+      Blackboard assignSupervisor(supv)
+
+      Blackboard put Person("Leonardo", "Pisano")
+      Blackboard put Person("Leonardo", "da Vinci")
+      Blackboard put Person("Leonhard", "Euler")
+      Blackboard put Person("Wilhelm", "Wien")
+
+      val hits = supv !? supv.Check()
+      hits must be_==(4)
+
+      Blackboard put "A string"
+      Blackboard put 42
+      Blackboard put 1234567890L
+      Blackboard put "Firstname Lastname Address"
+      Blackboard put 1.0
+
+      hackToLetMessagesDrain()
+
+      val hitsnow = supv !? supv.Check()
+      hitsnow must be_==(9)
+    }
+  }
+
+  def hackToLetMessagesDrain() {
+    Thread.sleep(100)
   }
 }
